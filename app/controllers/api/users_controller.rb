@@ -7,15 +7,15 @@ class Api::UsersController < ApplicationController
 		checkUser = User.find_by(email: email)
 
 		if checkUser
+			p checkUser.wallet
 			render json: {msg: 'User already exsist'}
 		else
-		addres = SecureRandom.hex(20)
-		p addres
-		newUser = User.new(userParams)
+
+			newUser = User.new(userParams)
 			if newUser.save!
-
-
-
+				addres = SecureRandom.hex(20)
+				p addres
+				newUser.build_wallet(ballance: 50, wallet_address: addres).save!
 				payload = {
 					user: {
 						id: newUser.id

@@ -3,5 +3,5 @@ class User < ApplicationRecord
     validates :email, presence: true
     validates :pin, presence: true, length: {minimum:4, maximum:4}
     
-    has_one :wallet, class_name: "Wallet", foreign_key: "user_id", dependent: :destroy
+    has_one :wallet, class_name: "Wallet", dependent: :destroy
 end
