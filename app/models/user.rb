@@ -1,5 +1,7 @@
 class User < ApplicationRecord
-    has_secure_password
+    validates :name, presence: true
+    validates :email, presence: true
+    validates :pin, presence: true, length: {minimum:4, maximum:4}
     
-    has_one :wallet, class_name: "wallet", foreign_key: "wallet_id"
+    has_one :wallet, class_name: "Wallet", foreign_key: "user_id", dependent: :destroy
 end

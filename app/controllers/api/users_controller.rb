@@ -1,22 +1,51 @@
 class Api::UsersController < ApplicationController
+	require 'securerandom'
 
-    def signup
-        p params
+	EXP = Time.now.to_i + 4 * 5000
+	def signup
+		email = params[:email]	
+		checkUser = User.find_by(email: email)
 
-    end
+		if checkUser
+			render json: {msg: 'User already exsist'}
+		else
+		addres = SecureRandom.hex(20)
+		p addres
+		newUser = User.new(userParams)
+			if newUser.save!
+
+
+
+				payload = {
+					user: {
+						id: newUser.id
+					},
+					exp: EXP
+				}
+				token = auth(newUser)
+				render json: {token: token}
+		end
+  end
+
+end
+		
+
 
     private 
-    EXP = Time.now.to_i + 4 * 5000
     SECRET_KEY = 'codesalley'
     ALG = 'HS512'
 
     def auth(data)
-      token 
+				token = JWT.encode data, SECRET_KEY, ALG
+				return token 
+    end
+
+    def authUser(token)
 
     end
 
-    def authUser()
-
-    end
+		def userParams
+			params.require('user').permit(:name, :email, :password, :pin)
+		end
 
 end
