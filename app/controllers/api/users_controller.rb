@@ -3,6 +3,7 @@ class Api::UsersController < ApplicationController
 
 	EXP = Time.now.to_i + 4 * 5000
 	def signup
+
 		email = params[:email]	
 		checkUser = User.find_by(email: email)
 		if checkUser
@@ -13,12 +14,14 @@ class Api::UsersController < ApplicationController
 				addres = SecureRandom.hex(20)
 				newUser.build_wallet(ballance: 50, wallet_address: addres).save!
 				token = auth(newUser)
-				render json: {wepay: token}
+				render json: {"wepay": token }
 			end
   	end
 	end
 
 	def me 
+		p params
+		p '-----+---'
 		token =  request.headers[:wepay]
 		if authUser(token) != false 
 			user = authUser(token)
@@ -32,7 +35,6 @@ class Api::UsersController < ApplicationController
 
 	def signin
 		email, password =  params[:email], params[:password]
-		p password
 		findUser = User.find_by(email: email)
 		if !findUser || findUser.password != password
 			render json: {msg: 'invalid credentials'}

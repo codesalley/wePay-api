@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace 'api' do
     post '/signup', to: 'users#signup'
     post '/signin', to: 'users#signin'
-    post '/me',  to: 'users#me'
+    get '/me',  to: 'users#me'
   end
 
   root 'wepay#index'
